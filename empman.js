@@ -1,16 +1,11 @@
-var mysql = require("mysql");
-var inquirer = require("inquirer");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
 
+//Connection to the database
 var connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
-
-  // Your username
   user: "root",
-
-  // Your password
   password: "Welcomenow12345",
   database: "empManSys"
 });
@@ -20,6 +15,7 @@ connection.connect(function(err) {
   runSearch();
 });
 
+//Prompt user to see what they wantto do
 function runSearch() {
   inquirer
     .prompt({
@@ -52,6 +48,10 @@ function runSearch() {
       case "View Roles":
         roleSearch();
         break;
+
+      case "View Employees":
+      employeeSearch();
+      break;
 
       case "View Employees by Manager":
         managerSearch();
@@ -99,15 +99,141 @@ function runSearch() {
       }
     });
 }
+//Add departments
+function departmentInsert() {
+  inquirer
+    .prompt(
+      {
+      name: "newDepartment",
+      type: "input",
+      message: "Enter the department name?"
+    })
+    .then(function(answer) {
+      connection.query("insert into department (name) values (?)", answer.newDepartment,function(err, res) {
+        if (err) throw err;
+        console.log(answer.newDepartment+" Created" );
+                   
+      })     
+        runSearch();
+      });
+    
+  }
 
+  //Add roles
+  function roleInsert() {
+    inquirer
+      .prompt({
+        name: "newTitle",
+        type: "input",
+        message: "what is the title"
+      },
+      {
+      name: "newSalary",
+      type: "input",
+      message: "what is the Salary"},
+      {
+        name: "newDepart",
+        type: "input",
+        message: "what is the Department Id"})
+      .then(function(answer) {
+        connection.query("insert into role (title,salary,department_id) value (?,?,?)", answer.newTitle,answer.newSalary,answer.newDepart,function(err, res) {
+          if (err) throw err;
+          //console.log(answer.name+" Created" );
+                     
+        })     
+          runSearch();
+        });
+      
+    }
+
+     //Add employees
+  function employeeInsert() {
+    inquirer
+      .prompt([
+        {
+        name: "newFname",
+        type: "input",
+        message: "what is the First Name"
+      },
+      {
+      name: "newLname",
+      type: "input",
+      message: "what is the Last Name"},
+      {
+        name: "newRoleId",
+        type: "input",
+        message: "what is the roleId"},
+        {
+          name: "newManagerId",
+          type: "input",
+          message: "what is the Manager Id"}
+      ])
+      .then(function(answer) {
+        connection.query("insert into employee (first_name,last_name,role_id, manager_id) value (?,?,?,?)", [answer.newFname,answer.newLname,answer.newRoleId,answer.newManagerId],function(err, res) {
+          if (err) throw err;
+          //console.log(answer.name+" Created" );
+                     
+        })     
+          runSearch();
+        });
+      
+    }
+  
+
+//View all the departments in Database
 function departmentSearch() {
       connection.query("SELECT * FROM department", function(err, res) {
         if (err) throw err;
           console.log("Here are all the departments");
-          console.table(res)
-        })
+           for (var i = 0; i < res.length; i++) {
+                      console.table("Depart_ID: " + res[i].id + " | Name: " + res[i].name );
+                   }
+      })    
         runSearch();
       }
+
+
+
+    
+
+//View all the roles in Database
+function roleSearch() {
+  connection.query("SELECT id, title FROM role", function(err, res) {
+    if (err) throw err;
+      console.log("Here are all the roles");
+       for (var i = 0; i < res.length; i++) {
+                  console.table("Role_ID: " + res[i].id + " | Title: " + res[i].title );
+               }
+  })    
+    runSearch();
+  }
+
+  //View all the employees in Database
+function employeeSearch() {
+  connection.query("SELECT * FROM employee", function(err, res) {
+    if (err) throw err;
+      console.log("Here are all the roles");
+       for (var i = 0; i < res.length; i++) {
+                  console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
+               }
+  })    
+    runSearch();
+  }
+
+  //View all the employees in Database
+function employeeSearch() {
+  connection.query("SELECT * FROM employee", function(err, res) {
+    if (err) throw err;
+      console.log("Here are all the roles");
+       for (var i = 0; i < res.length; i++) {
+                  console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
+               }
+  })    
+    runSearch();
+  }
+
+
+  //view employee by manager
 
 
 // function roleSearch() {
