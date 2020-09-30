@@ -136,7 +136,7 @@ function departmentInsert() {
         type: "input",
         message: "what is the Department Id"})
       .then(function(answer) {
-        connection.query("insert into role (title,salary,department_id) value (?,?,?)", answer.newTitle,answer.newSalary,answer.newDepart,function(err, res) {
+        connection.query("insert into role (title,salary,department_id) value (?,?,?)", [answer.newTitle,answer.newSalary,answer.newDepart],function(err, res) {
           if (err) throw err;
           //console.log(answer.name+" Created" );
                      
