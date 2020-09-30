@@ -26,7 +26,7 @@ function runSearch() {
         "Add Department",
         "Add Role",
         "Add Employee",
-        "View Departments",
+        "View Department",
         "View Roles",
         "View Employees",
         "Update Employee Roles",
@@ -234,6 +234,31 @@ function employeeSearch() {
 
 
   //view employee by manager
+
+
+
+
+  //Delete Departments
+  function departmentDelete() {
+    inquirer
+      .prompt(
+        {
+        name: "departmentD",
+        type: "input",
+        message: "What is the id of the department you want to delete?"
+      })
+      .then(function(answer) {
+        connection.query("delete from department where (?)", answer.departmentD,function(err, res) {
+          if (err) throw err;
+          console.log(answer.departmentD+" Has been delete" );
+                     
+        })     
+          runSearch();
+        });
+      
+    }
+
+
 
 
 // function roleSearch() {
