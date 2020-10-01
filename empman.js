@@ -32,9 +32,9 @@ function runSearch() {
         "Update Employee Roles",
         "Update Employee Manager",
         "View Employees by Manager",
-        "Delete Departments",
+        "Delete Department",
         "Delete Roles",
-        "Delete Employees",
+        "Delete Employee",
         "View Department Budget",
         "exit"
       ]
@@ -220,23 +220,46 @@ function employeeSearch() {
     runSearch();
   }
 
-  //View all the employees in Database
-function employeeSearch() {
-  connection.query("SELECT * FROM employee", function(err, res) {
-    if (err) throw err;
-      console.log("Here are all the roles");
-       for (var i = 0; i < res.length; i++) {
-                  console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
-               }
-  })    
-    runSearch();
-  }
+
 
 
   //view employee by manager
 
 
+  //
+  //View Department Budget
+function budgetSearch() {
+  inquirer
+      .prompt(
+        {
+        name: "departmentB",
+        type: "list",
+        message: "What depatments budget would you like to see?",
+        choices:["Finance",
+          "Human Resources",
+          "Accounting",
+          "Information Technology",
+          "Treasury",
+          "Sourcing",
+          "Real Estate",
+          "Facilities",
+          "Marketing",
+          "Innnovation"]
 
+      })
+  var query = "select  format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name = (?)"
+
+  connection.query(query, answer.departmentB,function(err, res) {
+    if (err) throw err;
+      console.log("Here is the Department Budget");
+       for (var i = 0; i < res.length; i++) {
+                  console.table( " | department: " + res[i].depatment_name + " | Total salary: " + res[i].salary)
+               }
+  })    
+    runSearch();
+  }
+
+  
 
   //Delete Departments
   function departmentDelete() {
@@ -251,96 +274,57 @@ function employeeSearch() {
         connection.query("delete from department where (?)", answer.departmentD,function(err, res) {
           if (err) throw err;
           console.log(answer.departmentD+" Has been delete" );
+  
                      
         })     
-          runSearch();
-        });
-      
-    }
+        runSearch(); 
+    })
+  }
+
+//Delete Employeee
+  function employeeDelete() {
+    inquirer
+    .prompt(
+      {
+      name: "employeeD",
+      type: "input",
+      message: "What is the id of the department you want to delete?"
+    })
+    .then(function(answer) {
+      connection.query("delete from employee where (?)", employeeD.departmentD,function(err, res) {
+        if (err) throw err;
+        console.log(answer.employeeD+" Has been delete" );
+      })
+                   
+      })     
+      runSearch(); 
+  }
 
 
 
 
-// function roleSearch() {
-//   var query = "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
-//   connection.query(query, function(err, res) {
-//     if (err) throw err;
-//     for (var i = 0; i < res.length; i++) {
-//       console.log(res[i].artist);
-//     }
-//     runSearch();
-//   });
-// }
 
-// function rangeSearch() {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "start",
-//         type: "input",
-//         message: "Enter starting position: ",
-//         validate: function(value) {
-//           if (isNaN(value) === false) {
-//             return true;
-//           }
-//           return false;
-//         }
-//       },
-//       {
-//         name: "end",
-//         type: "input",
-//         message: "Enter ending position: ",
-//         validate: function(value) {
-//           if (isNaN(value) === false) {
-//             return true;
-//           }
-//           return false;
-//         }
-//       }
-//     ])
-//     .then(function(answer) {
-//       var query = "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
-//       connection.query(query, [answer.start, answer.end], function(err, res) {
-//         if (err) throw err;
-//         for (var i = 0; i < res.length; i++) {
-//           console.log(
-//             "Position: " +
-//               res[i].position +
-//               " || Song: " +
-//               res[i].song +
-//               " || Artist: " +
-//               res[i].artist +
-//               " || Year: " +
-//               res[i].year
-//           );
-//         }
-//         runSearch();
-//       });
-//     });
-// }
+  function managerUpdate() {
 
-// function songSearch() {
-//   inquirer
-//     .prompt({
-//       name: "song",
-//       type: "input",
-//       message: "What song would you like to look for?"
-//     })
-//     .then(function(answer) {
-//       console.log(answer.song);
-//       connection.query("SELECT * FROM top5000 WHERE ?", { song: answer.song }, function(err, res) {
-//         if (err) throw err;
-//         console.log(
-//           "Position: " +
-//             res[0].position +
-//             " || Song: " +
-//             res[0].song +
-//             " || Artist: " +
-//             res[0].artist +
-//             " || Year: " +
-//             res[0].year
-//         );
-//         runSearch();
-//       });
-//     });
-// }
+
+    inquirer
+    .prompt(
+      {
+      name: "managerD",
+      message: "What is the id of the department you want to delete?",
+      choices:[]
+    })
+    .then(function(answer) {
+      connection.query("SELECT * FROM employee", function(err, res) {
+        if (err) throw err;
+          console.log("Here are all the roles");
+           for (var i = 0; i < res.length; i++) {
+                      console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
+                   }
+      })
+                   
+      })     
+      runSearch(); 
+  
+  
+  }
