@@ -187,11 +187,11 @@ function departmentSearch() {
       connection.query("SELECT * FROM department", function(err, res) {
         if (err) throw err;
           console.log("Here are all the departments");
-           for (var i = 0; i < res.length; i++) {
-                      console.table("Depart_ID: " + res[i].id + " | Name: " + res[i].name );
-                   }
+           
+                      console.table(res );  
+                      runSearch();               
       })    
-        runSearch();
+        
       }
 
 
@@ -203,11 +203,12 @@ function roleSearch() {
   connection.query("SELECT id, title FROM role", function(err, res) {
     if (err) throw err;
       console.log("Here are all the roles");
-       for (var i = 0; i < res.length; i++) {
-                  console.table("Role_ID: " + res[i].id + " | Title: " + res[i].title );
-               }
+      
+                  console.table(res);
+                  runSearch();
+               
   })    
-    runSearch();
+   
   }
 
   //View all the employees in Database
@@ -215,11 +216,12 @@ function employeeSearch() {
   connection.query("SELECT * FROM employee", function(err, res) {
     if (err) throw err;
       console.log("Here are all the roles");
-       for (var i = 0; i < res.length; i++) {
-                  console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
-               }
+     
+                  console.table(res);
+                  runSearch();
+               
   })    
-    runSearch();
+    
   }
 
 
@@ -253,14 +255,15 @@ function employeeSearch() {
     
       ])
       .then(function(answer) {
-        query = "select format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name = ?"
+        query = "select name as Department_Name, format(sum(salary),0) as Total_Department_Salary from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where  name = ?"
         connection.query(query, answer.BudgetS,function(err, res) {
           if (err) throw err;
-          for (var i = 0; i < res.length; i++) {
-          console.table("department:"  + res[i].name+ " | Total Salary: " + res[i].Salary);
-          }            
-        })     
+         
+          console.table(res)
           runSearch();
+                   
+        })     
+          
         });
       
     }
@@ -324,9 +327,9 @@ function employeeSearch() {
       connection.query("SELECT * FROM employee", function(err, res) {
         if (err) throw err;
           console.log("Here are all the roles");
-           for (var i = 0; i < res.length; i++) {
+           
                       console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
-                   }
+                   
       })
                    
       })     
