@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const Choices = require("inquirer/lib/objects/choices");
 
 //Connection to the database
 var connection = mysql.createConnection({
@@ -228,36 +229,39 @@ function employeeSearch() {
 
   //
   //View Department Budget
-function budgetSearch() {
-  inquirer
-      .prompt(
+  function budgetSearch() {
+    inquirer
+      .prompt([
         {
-        name: "departmentB",
+        name: "BudgetS",
         type: "list",
-        message: "What depatments budget would you like to see?",
-        choices:["Finance",
-          "Human Resources",
-          "Accounting",
+        message: "What Department Budget would you like to see",
+        choices: [
+          "Finance",
           "Information Technology",
+          "Marketing",
+          "Facilities",
+          "Accounting",
           "Treasury",
           "Sourcing",
           "Real Estate",
-          "Facilities",
-          "Marketing",
-          "Innnovation"]
-
-      })
-  var query = "select  format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name = (?)"
-
-  connection.query(query, answer.departmentB,function(err, res) {
-    if (err) throw err;
-      console.log("Here is the Department Budget");
-       for (var i = 0; i < res.length; i++) {
-                  console.table( " | department: " + res[i].depatment_name + " | Total salary: " + res[i].salary)
-               }
-  })    
-    runSearch();
-  }
+          "Innovation",
+          "Sourcing"
+        ]
+        }
+    
+      ])
+      .then(function(answer) {
+        query = "select format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name value(?)"
+        connection.query(query, answer.budgetS,function(err, res) {
+          if (err) throw err;
+          //console.log(answer.name+" Created" );
+                     
+        })     
+          runSearch();
+        });
+      
+    }
 
   
 
