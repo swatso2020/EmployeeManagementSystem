@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const cTable = require('console.table');
 const Choices = require("inquirer/lib/objects/choices");
 
 //Connection to the database
@@ -252,11 +253,12 @@ function employeeSearch() {
     
       ])
       .then(function(answer) {
-        query = "select format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name value(?)"
-        connection.query(query, answer.budgetS,function(err, res) {
+        query = "select format(sum(salary),0) as Salary, name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where name = ?"
+        connection.query(query, answer.BudgetS,function(err, res) {
           if (err) throw err;
-          //console.log(answer.name+" Created" );
-                     
+          for (var i = 0; i < res.length; i++) {
+          console.table("department:"  + res[i].name+ " | Total Salary: " + res[i].Salary);
+          }            
         })     
           runSearch();
         });
