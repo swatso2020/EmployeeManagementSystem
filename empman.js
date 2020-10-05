@@ -29,21 +29,21 @@ function runSearch() {
         "Add Role",
         "Add Employee",
         "View Department",
+        "View Department Budget",
         "View Roles",
         "View Employees",
+        "View Employees by Manager",
         "Update Employee Roles",
         "Update Employee Manager",
-        "View Employees by Manager",
         "Delete Department",
         "Delete Roles",
         "Delete Employee",
-        "View Department Budget",
         "exit"
       ]
     })
     .then(function(answer) {
       switch (answer.action) {
-      case "View Departments":
+      case "View Department":
         departmentSearch();
         break;
 
@@ -184,11 +184,10 @@ function departmentInsert() {
 
 //View all the departments in Database
 function departmentSearch() {
-      connection.query("SELECT * FROM department", function(err, res) {
+      connection.query("SELECT id as Department_ID, name Department_Name FROM department", function(err, res) {
         if (err) throw err;
           console.log("Here are all the departments");
-           
-                      console.table(res );  
+                      console.table(res);  
                       runSearch();               
       })    
         
@@ -200,7 +199,7 @@ function departmentSearch() {
 
 //View all the roles in Database
 function roleSearch() {
-  connection.query("SELECT id, title FROM role", function(err, res) {
+  connection.query("SELECT id as Role_ID, title as Role_Name FROM role", function(err, res) {
     if (err) throw err;
       console.log("Here are all the roles");
       
@@ -228,9 +227,39 @@ function employeeSearch() {
 
 
   //view employee by manager
+  function managerSearch() {
+    inquirer
+      .prompt([
+        {
+        name: "ManagerS",
+        type: "list",
+        message: "Which managers team would you like to see?",
+        choices: [
+          "Jim Beam",
+          "Sonny Lister",
+          "Mildred Racthed"
+        ]
+        }
+      ])
+      .then(function(answer) {
+        query = "select concat(last_name,', ',first_name) as Employee_Name, Title, format(Salary, 0) as Salary, name as Department_Name from employee join role on employee.role_id = role.id join Department on role.department_id = department.id"
+        connection.query(query, answer.ManagerS,function(err, res) {
+          if (err) throw err;
+         
+          console.table(res)
+          runSearch();
+                   
+        })     
+          
+        });
+      
+    }
 
 
-  //
+
+
+
+ 
   //View Department Budget
   function budgetSearch() {
     inquirer
@@ -252,7 +281,6 @@ function employeeSearch() {
           "Sourcing"
         ]
         }
-    
       ])
       .then(function(answer) {
         query = "select name as Department_Name, format(sum(salary),0) as Total_Department_Salary from employee join role on employee.role_id = role.id join Department on role.department_id = department.id where  name = ?"
@@ -267,6 +295,10 @@ function employeeSearch() {
         });
       
     }
+
+
+ 
+
 
   
 
@@ -312,7 +344,7 @@ function employeeSearch() {
 
 
 
-
+//Update Manager
   function managerUpdate() {
 
 

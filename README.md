@@ -4,7 +4,7 @@
 This is a Node CLI employement management system. This app interfaces with the mysql database to store, retrive, and updte employee informaton. The app uses SQL to update the database. The database has three Tables Department, Role, and Employee. 
 
 ![Database Schema](Assets/schema.png)
-
+# Table Specs
 * **department**:
 
   * **id** - INT PRIMARY KEY
