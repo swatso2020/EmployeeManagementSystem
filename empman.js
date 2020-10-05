@@ -188,9 +188,10 @@ function departmentSearch() {
         if (err) throw err;
           console.log("Here are all the departments");
                       console.table(res);  
-                      runSearch();               
+                      runSearch();
+                                 
       })    
-        
+     
       }
 
 
@@ -304,6 +305,10 @@ function employeeSearch() {
 
   //Delete Departments
   function departmentDelete() {
+    connection.query("SELECT * FROM department", function(err, res) {
+      if (err) throw err;
+        console.log("Here are all the departments");
+                    console.table(res); })
     inquirer
       .prompt(
         {
@@ -314,7 +319,7 @@ function employeeSearch() {
       .then(function(answer) {
         connection.query("delete from department where (?)", answer.departmentD,function(err, res) {
           if (err) throw err;
-          console.log(answer.departmentD+" Has been delete" );
+          console.log("Department #"+answer.departmentD+" Has been deleted" );
   
                      
         })     
@@ -329,7 +334,7 @@ function employeeSearch() {
       {
       name: "employeeD",
       type: "input",
-      message: "What is the id of the department you want to delete?"
+      message: "What is the id of the employee you want to delete?"
     })
     .then(function(answer) {
       connection.query("delete from employee where (?)", employeeD.departmentD,function(err, res) {
@@ -351,16 +356,54 @@ function employeeSearch() {
     inquirer
     .prompt(
       {
-      name: "managerD",
-      message: "What is the id of the department you want to delete?",
+      name: "employeeU",
+      message: "What is the id of the employee whos manager you want to Update?",
       choices:[]
-    })
+    },
+    {
+    name: "managerU",
+    message: "What is the id of the new manager?",
+    choices:[]
+  }
+    )
     .then(function(answer) {
-      connection.query("SELECT * FROM employee", function(err, res) {
+      query = "UPDATE employee SET  manager_id =  Where id = "
+      connection.query("SELECT * FROM employee",answer.managerU, answer.employeeU, function(err, res) {
         if (err) throw err;
-          console.log("Here are all the roles");
-           
-                      console.table("employee_ID: " + res[i].id + " | f_name: " + res[i].first_name + " | l_name: " + res[i].last_name +" | Title: " + res[i].title  );
+        //I would want the actual record displayed here.
+          console.log("Employee Manager has been updated");
+                   
+      })
+                   
+      })     
+      runSearch(); 
+  
+  
+  }
+
+
+  //Update Manager
+  function roleUpdate() {
+
+
+    inquirer
+    .prompt(
+      {
+      name: "employeeU",
+      message: "What is the id of the employee whos role you want to Update?",
+     
+    },
+    {
+    name: "roleU",
+    message: "What is the id of the new role?",
+    
+  }
+    )
+    .then(function(answer) {
+      query = "UPDATE employee SET  role_id =  Where id = "
+      connection.query("SELECT * FROM employee",answer.roleU, answer.employeeU, function(err, res) {
+        if (err) throw err;
+          console.log("Employee Role has been updated");
                    
       })
                    
