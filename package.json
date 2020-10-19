@@ -1,0 +1,26 @@
+{
+  "name": "employeemanagementsystem",
+  "version": "1.0.0",
+  "description": "# About This is a Node CLI employement management system. This app interfaces with the mysql database to store, retrive, and updte employee informaton. The app uses SQL to update the database. The database has three Tables Department, Role, and Employee.",
+  "main": "empman.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1",
+    "promise-mysql": "^4.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swatso2020/EmployeeManagementSystem.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swatso2020/EmployeeManagementSystem/issues"
+  },
+  "homepage": "https://github.com/swatso2020/EmployeeManagementSystem#readme"
+}

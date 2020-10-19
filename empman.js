@@ -372,11 +372,12 @@ function employeeSearch() {
         if (err) throw err;
         //I would want the actual record displayed here.
           console.log("Employee Manager has been updated");
+          runSearch(); 
                    
       })
                    
       })     
-      runSearch(); 
+     
   
   
   }
@@ -384,8 +385,7 @@ function employeeSearch() {
 
   //Update Manager
   function roleUpdate() {
-
-
+    employeeSearch()
     inquirer
     .prompt(
       {
